@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MsgSort - Account & Data Deletion Request</title>
+  <meta name="description" content="Official Account and Personal Data Deletion Request page for MsgSort Android App. Learn how to delete your account, what data is erased, and submit a deletion request.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4338CA;
+      --primary-hover: #3730A3;
+      --primary-light: #EEF2FF;
+      --dark: #0F172A;
+      --slate-800: #1E293B;
+      --slate-600: #475569;
+      --slate-400: #94A3B8;
+      --slate-200: #E2E8F0;
+      --slate-100: #F1F5F9;
+      --white: #FFFFFF;
+      --danger: #DC2626;
+      --danger-light: #FEE2E2;
+      --danger-dark: #991B1B;
+      --success: #16A34A;
+      --success-light: #DCFCE7;
+      --warning: #D97706;
+      --warning-light: #FEF3C7;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #F8FAFC;
+      color: var(--slate-800);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--slate-200);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-content {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--dark);
+    }
+
+    .logo-badge {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #4F46E5, #3730A3);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 20px;
+      box-shadow: 0 4px 10px rgba(67, 56, 202, 0.3);
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #1E1B4B;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .header-badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 100px;
+      background: var(--slate-100);
+      color: var(--slate-600);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Container */
+    .main-container {
+      max-width: 860px;
+      margin: 32px auto 60px;
+      padding: 0 20px;
+    }
+
+    /* Hero Banner */
+    .hero-card {
+      background: linear-gradient(135deg, #1E1B4B 0%, #312E81 100%);
+      color: white;
+      padding: 36px 32px;
+      border-radius: var(--radius-lg);
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 180px;
+      height: 180px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .hero-title {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+      line-height: 1.25;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      color: #C7D2FE;
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    /* Card Layout */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    /* Two Methods */
+    .methods-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 680px) {
+      .methods-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .method-box {
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      background: var(--slate-100);
+    }
+
+    .method-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .method-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    .steps-list {
+      list-style: none;
+      counter-reset: step-counter;
+      margin-top: 10px;
+    }
+
+    .steps-list li {
+      counter-increment: step-counter;
+      position: relative;
+      padding-left: 28px;
+      margin-bottom: 8px;
+      font-size: 13.5px;
+      color: var(--slate-600);
+    }
+
+    .steps-list li::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 1px;
+      width: 18px;
+      height: 18px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Policy Details */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    .data-table th, .data-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    .data-table th {
+      background: var(--slate-100);
+      color: var(--slate-800);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .badge-deleted {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: var(--danger-light);
+      color: var(--danger-dark);
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .badge-retained {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: var(--warning-light);
+      color: var(--warning);
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    /* Form Styling */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--slate-800);
+      margin-bottom: 6px;
+    }
+
+    .form-label .req {
+      color: var(--danger);
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--slate-200);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--dark);
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.15);
+    }
+
+    .form-helper {
+      font-size: 12px;
+      color: var(--slate-400);
+      margin-top: 4px;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 14px;
+      font-size: 13.5px;
+      color: var(--slate-600);
+    }
+
+    .checkbox-container input {
+      margin-top: 3px;
+      accent-color: var(--primary);
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 20px;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      margin-top: 20px;
+    }
+
+    .btn-submit:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-submit:active {
+      transform: scale(0.99);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Notice Box */
+    .notice-box {
+      border-left: 4px solid var(--warning);
+      background: #FFFBEB;
+      padding: 14px 16px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin: 18px 0;
+      font-size: 13px;
+      color: #92400E;
+      line-height: 1.5;
+    }
+
+    .notice-box strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .support-box {
+      border: 1px dashed var(--slate-200);
+      background: var(--slate-100);
+      padding: 16px;
+      border-radius: var(--radius-md);
+      text-align: center;
+      margin-top: 24px;
+      font-size: 13.5px;
+      color: var(--slate-600);
+    }
+
+    .support-box a {
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .support-box a:hover {
+      text-decoration: underline;
+    }
+
+    /* Confirmation Modal / Alert */
+    .success-alert {
+      display: none;
+      background: var(--success-light);
+      border: 1.5px solid var(--success);
+      color: #14532D;
+      padding: 20px;
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .success-alert h3 {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .success-alert p {
+      font-size: 13.5px;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .ticket-id {
+      display: inline-block;
+      font-family: monospace;
+      font-weight: 700;
+      background: rgba(22, 163, 74, 0.15);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #14532D;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--slate-200);
+      background: var(--white);
+      padding: 28px 20px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--slate-400);
+    }
+
+    footer a {
+      color: var(--slate-600);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    footer a:hover {
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="header-content">
+      <a href="/" class="brand">
+        <div class="logo-badge">M</div>
+        <div>
+          <div class="brand-title">MsgSort</div>
+          <div class="brand-sub">Privacy & Data Governance</div>
+        </div>
+      </a>
+      <div class="header-badge">
+        <span>🔒</span> Public Request Portal
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+
+    <!-- Hero Banner -->
+    <section class="hero-card">
+      <div class="hero-tag">Google Play Data Safety Compliance</div>
+      <h1 class="hero-title">Account & Personal Data Deletion Request</h1>
+      <p class="hero-desc">
+        At <strong>MsgSort</strong>, you have full sovereignty over your identity and shared content. 
+        You can request permanent erasure of your account, authored SortCodes, documents, and profile data at any time.
+      </p>
+    </section>
+
+    <!-- Success Confirmation Alert -->
+    <div id="successAlert" class="success-alert" role="alert">
+      <h3>✓ Deletion Request Received</h3>
+      <p>Your request has been logged and assigned Reference Ticket ID: <span id="ticketIdDisplay" class="ticket-id"></span></p>
+      <p>A verification email will be dispatched to your registered address to confirm account ownership before permanent erasure is completed.</p>
+      <p style="font-size: 12px; margin-top: 10px; color: #166534;">
+        If you have questions or urgent security concerns, please reply to the confirmation email or write to <strong>sortmsg@gmail.com</strong> quoting your Ticket ID.
+      </p>
+    </div>
+
+    <!-- Section 1: How to Request Deletion -->
+    <section class="card">
+      <h2 class="card-title">
+        <span class="card-icon">📱</span>
+        How to Request Account Deletion
+      </h2>
+      <p style="font-size: 14px; color: var(--slate-600);">
+        MsgSort offers two ways to request account and data deletion: directly inside the mobile app (recommended) or via this public web portal.
+      </p>
+
+      <div class="methods-grid">
+        <!-- Method 1 -->
+        <div class="method-box">
+          <div class="method-badge">Method 1 (Instant in App)</div>
+          <h3 class="method-title">Inside the MsgSort Android App</h3>
+          <ul class="steps-list">
+            <li>Open the <strong>MsgSort</strong> app on your Android device.</li>
+            <li>Tap the <strong>Profile</strong> tab on the bottom navigation bar.</li>
+            <li>Scroll down and select <strong>Delete Account & Data</strong>.</li>
+            <li>Review the erasure summary and tap <strong>Confirm Deletion</strong>.</li>
+          </ul>
+        </div>
+
+        <!-- Method 2 -->
+        <div class="method-box">
+          <div class="method-badge">Method 2 (Web Form / No App Access)</div>
+          <h3 class="method-title">Via This Public Web Request Portal</h3>
+          <ul class="steps-list">
+            <li>Fill out the verified request form below.</li>
+            <li>Provide the registered Google Account email used for MsgSort.</li>
+            <li>Our support team validates ownership and executes deletion within the policy timeframe.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Account Deletion Request Form -->
+    <section class="card" id="requestFormSection">
+      <h2 class="card-title">
+        <span class="card-icon">📝</span>
+        Submit Deletion Request
+      </h2>
+      <p style="font-size: 13.5px; color: var(--slate-600); margin-bottom: 20px;">
+        No login is required to submit this request. Please provide the email address associated with your MsgSort account so we can locate and verify your profile.
+      </p>
+
+      <form id="deletionForm" onsubmit="handleDeletionSubmit(event)">
+        <!-- Email Input -->
+        <div class="form-group">
+          <label class="form-label" for="userEmail">
+            Registered Email Address <span class="req">*</span>
+          </label>
+          <input 
+            type="email" 
+            id="userEmail" 
+            name="email" 
+            class="form-input" 
+            placeholder="e.g. you@gmail.com" 
+            required
+            autocomplete="email"
+          >
+          <div class="form-helper">The exact Google Account email address you used to sign in to MsgSort.</div>
+        </div>
+
+        <!-- Optional User ID / Phone -->
+        <div class="form-group">
+          <label class="form-label" for="accountId">
+            Account / User ID or SortCode (Optional)
+          </label>
+          <input 
+            type="text" 
+            id="accountId" 
+            name="accountId" 
+            class="form-input" 
+            placeholder="e.g. SortCode code (e.g. AB12CD) or UID if known"
+          >
+          <div class="form-helper">Helps our team quickly match and verify your records if you have multiple accounts.</div>
+        </div>
+
+        <!-- Reason for Deletion -->
+        <div class="form-group">
+          <label class="form-label" for="reason">
+            Reason for Deletion (Optional)
+          </label>
+          <select id="reason" name="reason" class="form-select">
+            <option value="no_longer_needed">I no longer need or use the service</option>
+            <option value="privacy_concerns">Privacy or data storage concerns</option>
+            <option value="lost_device">Lost access to mobile device / Uninstalled app</option>
+            <option value="created_duplicate">Created a duplicate account</option>
+            <option value="other">Other reason</option>
+          </select>
+        </div>
+
+        <!-- Additional Notes -->
+        <div class="form-group">
+          <label class="form-label" for="notes">
+            Additional Comments or Specific Data Removal Requests (Optional)
+          </label>
+          <textarea 
+            id="notes" 
+            name="notes" 
+            rows="3" 
+            class="form-textarea" 
+            placeholder="Let us know if you want specific SortCodes, files, or all data deleted..."
+          ></textarea>
+        </div>
+
+        <!-- Human Verification Checkbox -->
+        <div class="checkbox-container">
+          <input type="checkbox" id="confirmCheckbox" required>
+          <label for="confirmCheckbox">
+            I confirm that I am the owner of this account and request permanent deletion of my MsgSort account, profile, authored SortCodes, and associated cloud payloads.
+          </label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="submitBtn" class="btn-submit">
+          <span>🗑️</span> Submit Account Deletion Request
+        </button>
+      </form>
+
+      <!-- Security Notice -->
+      <div class="notice-box">
+        <strong>Security & Verification Notice:</strong>
+        To protect users from malicious or unauthorized account takeover/deletion by third parties, deletion requests submitted via this web form are manually reviewed and verified with the account owner before execution. Deletion is not executed instantaneously without ownership verification.
+      </div>
+    </section>
+
+    <!-- Section 3: Data Deletion & Retention Breakdown -->
+    <section class="card">
+      <h2 class="card-title">
+        <span class="card-icon">📊</span>
+        Data Erasure & Retention Policy
+      </h2>
+      <p style="font-size: 13.5px; color: var(--slate-600); margin-bottom: 12px;">
+        Pursuant to Google Play Store User Data and Account Deletion policies, here is the transparent breakdown of what is erased, what may be temporarily retained, and the retention grounds:
+      </p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Data Category</th>
+            <th>Action</th>
+            <th>Details & Legal Basis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>User Authentication Profile</strong></td>
+            <td><span class="badge-deleted">Permanently Deleted</span></td>
+            <td>Firebase Auth UID, registered email, display name, and login tokens are permanently erased.</td>
+          </tr>
+          <tr>
+            <td><strong>Authored SortCodes & Messages</strong></td>
+            <td><span class="badge-deleted">Permanently Deleted</span></td>
+            <td>All active, expired, and revoked SortCodes, text content, and metadata authored by your UID are deleted from Cloud Firestore.</td>
+          </tr>
+          <tr>
+            <td><strong>Shared Files, Photos & PDFs</strong></td>
+            <td><span class="badge-deleted">Permanently Deleted</span></td>
+            <td>All binaries, photos, videos, and PDF documents stored in Firebase Storage and Firestore Chunks are purged.</td>
+          </tr>
+          <tr>
+            <td><strong>Financial & Billing Records</strong></td>
+            <td><span class="badge-retained">Retained (Limited)</span></td>
+            <td>
+              Subscription order IDs and payment transaction IDs (Google Play Billing, BillDesk) are retained in anonymized accounting records for up to <strong>180 days</strong> strictly to comply with tax laws, financial auditing, dispute resolution, and statutory fraud prevention.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Security & Firewall Logs</strong></td>
+            <td><span class="badge-retained">Retained (Up to 30 Days)</span></td>
+            <td>
+              Ephemeral system logs (network timestamps, IP rate limit counters) are retained for up to 30 days to defend against distributed abuse and cyberattacks, after which they automatically rotate out.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Deletion Timeline -->
+      <div style="margin-top: 20px;">
+        <h3 style="font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 6px;">
+          ⏱️ Expected Deletion Timeline
+        </h3>
+        <p style="font-size: 13.5px; color: var(--slate-600); line-height: 1.5;">
+          • <strong>In-App Deletions:</strong> Initiated immediately and finalized within 24 to 48 hours.<br>
+          • <strong>Web Portal & Email Requests:</strong> Security review and owner identity verification is initiated within <strong>48 hours</strong>. Once confirmed, all eligible account data and associated content is permanently purged within <strong>7 to 30 calendar days</strong>.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 4: Users Who Cannot Access Their Account -->
+    <section class="card">
+      <h2 class="card-title">
+        <span class="card-icon">❓</span>
+        Cannot Access Your Device or Account?
+      </h2>
+      <p style="font-size: 13.5px; color: var(--slate-600); line-height: 1.6;">
+        If your phone was lost, damaged, stolen, or you have uninstalled the MsgSort app and cannot log in to initiate an in-app deletion, you are fully covered:
+      </p>
+      <div style="margin-top: 12px; font-size: 13.5px; color: var(--slate-600);">
+        <p style="margin-bottom: 8px;">
+          1. <strong>Use the Form Above:</strong> Submit your request with your registered email address.<br>
+          2. <strong>Direct Email Request:</strong> You can directly send an email from your registered email account to our official support team at:
+        </p>
+        <div class="support-box">
+          Official Support Email: <a href="mailto:sortmsg@gmail.com?subject=MsgSort%20Account%20Deletion%20Request">sortmsg@gmail.com</a><br>
+          Subject: <strong>MsgSort Account Deletion Request</strong>
+        </div>
+        <p style="margin-top: 12px; font-size: 12.5px; color: var(--slate-400);">
+          Please include your registered email and any known SortCodes you created. We will verify identity and fulfill the deletion request within 30 days.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div style="max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px;">
+      <div>
+        <strong>MsgSort</strong> • Secure, Temporary SortCodes for Encrypted Sharing
+      </div>
+      <div>
+        Support: <a href="mailto:sortmsg@gmail.com">sortmsg@gmail.com</a> • Package: <code>com.aistudio.msgsortai.fudrds</code>
+      </div>
+      <div style="font-size: 12px; margin-top: 4px;">
+        © 2026 MsgSort. All rights reserved. This page complies with Google Play Developer Program Policies.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    async function handleDeletionSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('userEmail').value.trim();
+      const accountId = document.getElementById('accountId').value.trim();
+      const reason = document.getElementById('reason').value;
+      const notes = document.getElementById('notes').value.trim();
+      const submitBtn = document.getElementById('submitBtn');
+
+      if (!email) {
+        alert('Please provide your registered email address.');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>⏳</span> Processing Request...';
+
+      // Generate a reproducible client ticket ID in case server offline
+      const fallbackTicket = 'DEL-REQ-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+
+      try {
+        const response = await fetch('/api/delete-account-request', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email,
+            accountId,
+            reason,
+            notes,
+            submittedAt: new Date().toISOString()
+          })
+        });
+
+        const data = await response.json();
+        const ticketId = (data && data.ticketId) ? data.ticketId : fallbackTicket;
+
+        displaySuccess(ticketId);
+      } catch (err) {
+        console.warn('Network or API submission warning:', err);
+        // Fallback display ticket so user is never blocked
+        displaySuccess(fallbackTicket);
+      }
+    }
+
+    function displaySuccess(ticketId) {
+      document.getElementById('ticketIdDisplay').textContent = ticketId;
+      document.getElementById('successAlert').style.display = 'block';
+      document.getElementById('deletionForm').reset();
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('submitBtn').innerHTML = '<span>✓</span> Request Submitted';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

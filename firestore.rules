@@ -1,0 +1,168 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Validation for UserProfile
+    function isValidUserProfile(data) {
+      return data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.email is string && data.email.size() >= 3 && data.email.size() <= 200 &&
+             (!('displayName' in data) || (data.displayName is string && data.displayName.size() <= 100));
+    }
+
+    // Validation for SortCode
+    function isValidSortCode(data) {
+      return data.code is string && data.code.size() >= 4 && data.code.size() <= 32 &&
+             data.ownerUid is string && data.ownerUid.size() >= 1 && data.ownerUid.size() <= 128 &&
+             (!('title' in data) || (data.title is string && data.title.size() <= 100)) &&
+             data.contentType in ['text', 'document', 'code', 'file', 'image', 'video', 'application/pdf'] &&
+             (!('textContent' in data) || (data.textContent is string && data.textContent.size() <= 200000)) &&
+             (!('fileName' in data) || (data.fileName is string && data.fileName.size() <= 255)) &&
+             (!('fileSize' in data) || (data.fileSize is int && data.fileSize >= 0 && data.fileSize <= 26214400)) &&
+             (!('fileMimeType' in data) || (data.fileMimeType is string && data.fileMimeType.size() <= 100)) &&
+             (!('fileBase64' in data) || (data.fileBase64 is string && data.fileBase64.size() <= 1000000)) &&
+             (!('totalChunks' in data) || (data.totalChunks is int && data.totalChunks >= 0 && data.totalChunks <= 100)) &&
+             (!('storagePath' in data) || (data.storagePath is string && data.storagePath.size() <= 500)) &&
+             (!('imageUrl' in data) || (data.imageUrl is string && data.imageUrl.size() <= 2048)) &&
+             (!('fileUrl' in data) || (data.fileUrl is string && data.fileUrl.size() <= 2048)) &&
+             (!('thumbnailBase64' in data) || (data.thumbnailBase64 is string && data.thumbnailBase64.size() <= 250000)) &&
+             (!('imageWidth' in data) || (data.imageWidth is int && data.imageWidth >= 0)) &&
+             (!('imageHeight' in data) || (data.imageHeight is int && data.imageHeight >= 0)) &&
+             data.status in ['active', 'expired', 'revoked'] &&
+             data.passwordProtected is bool &&
+             (!('passwordHash' in data) || (data.passwordHash is string && data.passwordHash.size() <= 128)) &&
+             data.downloadAllowed is bool &&
+             (!('description' in data) || (data.description is string && data.description.size() <= 500)) &&
+             (!('viewsCount' in data) || (data.viewsCount is int && data.viewsCount >= 0));
+    }
+
+    // Match rules for users
+    match /users/{userId} {
+      allow get: if isSignedIn() && request.auth.uid == userId;
+      allow list: if false;
+
+      allow create: if isSignedIn() &&
+                       request.auth.uid == userId &&
+                       incoming().userId == request.auth.uid &&
+                       incoming().createdAt is timestamp &&
+                       incoming().createdAt <= request.time &&
+                       isValidUserProfile(incoming());
+
+      allow update: if isSignedIn() &&
+                       request.auth.uid == userId &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       isValidUserProfile(incoming()) &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'email']);
+
+      allow delete: if isSignedIn() && request.auth.uid == userId;
+
+      // User subscription record: Read-only for authenticated owner; write forbidden from client
+      // Only trusted server backend (Firebase Admin SDK / Cloud Functions) can create, update, or revoke subscriptions
+      match /subscription/{subId} {
+        allow get, list: if isSignedIn() && request.auth.uid == userId;
+        allow write: if false;
+      }
+    }
+
+    // Match rules for sortCodes
+    match /sortCodes/{sortCodeId} {
+      // Direct get access:
+      // Active and unexpired codes can be retrieved by anyone (recipient or owner).
+      // Revoked or expired codes can ONLY be read by the owner.
+      allow get: if isValidId(sortCodeId) && (
+        (existing().status == 'active' && existing().expiresAt > request.time) ||
+        (isSignedIn() && existing().ownerUid == request.auth.uid)
+      );
+
+      // List queries: ONLY owners can list their own SortCodes (Query Enforcer)
+      allow list: if isSignedIn() && resource.data.ownerUid == request.auth.uid;
+
+      // Creation: must be signed in, ownerUid matches caller, expiresAt is future timestamp
+      allow create: if isSignedIn() &&
+                       isValidId(sortCodeId) &&
+                       incoming().ownerUid == request.auth.uid &&
+                       incoming().createdAt is timestamp &&
+                       incoming().createdAt <= request.time + duration.value(5, 'm') &&
+                       incoming().expiresAt is timestamp &&
+                       incoming().expiresAt > request.time - duration.value(1, 'm') &&
+                       incoming().status == 'active' &&
+                       isValidSortCode(incoming());
+
+      // Update:
+      // 1. Owner can revoke: change status to 'revoked'
+      // 2. Incremental view counter when accessed
+      allow update: if isValidId(sortCodeId) && isValidSortCode(incoming()) && (
+        // Action: Owner revocation
+        (
+          isSignedIn() &&
+          existing().ownerUid == request.auth.uid &&
+          incoming().ownerUid == existing().ownerUid &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().expiresAt == existing().expiresAt &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['status']) &&
+          incoming().status == 'revoked'
+        ) ||
+        // Action: View increment
+        (
+          existing().status == 'active' &&
+          existing().expiresAt > request.time &&
+          incoming().ownerUid == existing().ownerUid &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().expiresAt == existing().expiresAt &&
+          incoming().status == existing().status &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['viewsCount'])
+        )
+      );
+
+      // Delete: ONLY owner can delete their SortCode
+      allow delete: if isValidId(sortCodeId) &&
+                       isSignedIn() &&
+                       existing().ownerUid == request.auth.uid;
+
+      // Subcollection for file / video chunks (reliable cross-device transfer without external storage bucket dependency)
+      match /chunks/{chunkId} {
+        // Direct get or list:
+        // Accessible if parent sortCode is active and not expired, OR caller is owner
+        allow get, list: if isValidId(sortCodeId) && (
+          (get(/databases/$(database)/documents/sortCodes/$(sortCodeId)).data.status == 'active' &&
+           get(/databases/$(database)/documents/sortCodes/$(sortCodeId)).data.expiresAt > request.time) ||
+          (isSignedIn() && get(/databases/$(database)/documents/sortCodes/$(sortCodeId)).data.ownerUid == request.auth.uid)
+        );
+
+        // Create: authenticated owner of parent code can create chunks
+        allow create: if isSignedIn() &&
+                         isValidId(sortCodeId) &&
+                         incoming().chunkIndex is int &&
+                         incoming().chunkIndex >= 0 &&
+                         incoming().chunkIndex <= 100 &&
+                         incoming().data is string &&
+                         incoming().data.size() <= 650000;
+
+        // Delete: owner can delete chunks
+        allow delete: if isSignedIn() &&
+                         isValidId(sortCodeId) &&
+                         get(/databases/$(database)/documents/sortCodes/$(sortCodeId)).data.ownerUid == request.auth.uid;
+      }
+    }
+  }
+}

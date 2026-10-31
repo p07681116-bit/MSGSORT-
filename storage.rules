@@ -1,0 +1,80 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Images uploaded by authenticated users
+    match /images/{imageId} {
+      allow read: if true;
+      allow create: if isSignedIn() &&
+                       request.resource.size <= 26214400 &&
+                       request.resource.contentType.matches('image/.*') &&
+                       (request.resource.metadata == null || 
+                        !('ownerUid' in request.resource.metadata) || 
+                        request.resource.metadata.ownerUid == request.auth.uid);
+      allow update, delete: if isSignedIn() && 
+                               resource.metadata != null && 
+                               resource.metadata.ownerUid == request.auth.uid;
+    }
+
+    // Videos uploaded by authenticated users
+    match /videos/{videoId} {
+      allow read: if true;
+      allow create: if isSignedIn() &&
+                       request.resource.size <= 26214400 &&
+                       request.resource.contentType.matches('video/.*') &&
+                       (request.resource.metadata == null || 
+                        !('ownerUid' in request.resource.metadata) || 
+                        request.resource.metadata.ownerUid == request.auth.uid);
+      allow update, delete: if isSignedIn() && 
+                               resource.metadata != null && 
+                               resource.metadata.ownerUid == request.auth.uid;
+    }
+
+    // General files / documents / PDFs uploaded by authenticated users
+    match /files/{fileId} {
+      allow read: if true;
+      allow create: if isSignedIn() &&
+                       request.resource.size <= 26214400 &&
+                       (request.resource.metadata == null || 
+                        !('ownerUid' in request.resource.metadata) || 
+                        request.resource.metadata.ownerUid == request.auth.uid);
+      allow update, delete: if isSignedIn() && 
+                               resource.metadata != null && 
+                               resource.metadata.ownerUid == request.auth.uid;
+    }
+
+    match /documents/{fileId} {
+      allow read: if true;
+      allow create: if isSignedIn() &&
+                       request.resource.size <= 26214400 &&
+                       (request.resource.metadata == null || 
+                        !('ownerUid' in request.resource.metadata) || 
+                        request.resource.metadata.ownerUid == request.auth.uid);
+      allow update, delete: if isSignedIn() && 
+                               resource.metadata != null && 
+                               resource.metadata.ownerUid == request.auth.uid;
+    }
+
+    match /pdfs/{fileId} {
+      allow read: if true;
+      allow create: if isSignedIn() &&
+                       request.resource.size <= 26214400 &&
+                       (request.resource.metadata == null || 
+                        !('ownerUid' in request.resource.metadata) || 
+                        request.resource.metadata.ownerUid == request.auth.uid);
+      allow update, delete: if isSignedIn() && 
+                               resource.metadata != null && 
+                               resource.metadata.ownerUid == request.auth.uid;
+    }
+
+    // Fallback rule for any other paths
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if isSignedIn() && request.resource.size <= 26214400;
+    }
+  }
+}
+

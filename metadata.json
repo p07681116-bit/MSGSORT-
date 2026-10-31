@@ -1,0 +1,8 @@
+{
+  "name": "Remix MsgSort",
+  "description": "Convert long messages and files into secure, temporary SortCodes for simple, fast, and private content sharing.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

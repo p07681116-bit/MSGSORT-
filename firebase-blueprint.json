@@ -1,0 +1,169 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth user UID"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User display name"
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when user was created"
+        }
+      },
+      "required": ["userId", "email", "createdAt"]
+    },
+    "SortCode": {
+      "title": "SortCode",
+      "description": "A secure SortCode record containing encrypted/stored message or file content with expiry controls",
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "The unique SortCode identifier"
+        },
+        "ownerUid": {
+          "type": "string",
+          "description": "UID of the creator user"
+        },
+        "title": {
+          "type": "string",
+          "description": "Optional title for the message or file"
+        },
+        "contentType": {
+          "type": "string",
+          "enum": ["text", "document", "code", "file", "image"],
+          "description": "Type of content stored"
+        },
+        "textContent": {
+          "type": "string",
+          "description": "The message or text content"
+        },
+        "fileName": {
+          "type": "string",
+          "description": "Original file name if file uploaded"
+        },
+        "fileSize": {
+          "type": "integer",
+          "description": "File size in bytes"
+        },
+        "fileMimeType": {
+          "type": "string",
+          "description": "MIME type of uploaded file"
+        },
+        "fileBase64": {
+          "type": "string",
+          "description": "Base64 or secure content reference"
+        },
+        "storagePath": {
+          "type": "string",
+          "description": "Firebase Storage reference path for uploaded images/files"
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Secure download URL for uploaded image"
+        },
+        "thumbnailBase64": {
+          "type": "string",
+          "description": "Compact image thumbnail preview data"
+        },
+        "imageWidth": {
+          "type": "integer",
+          "description": "Image width in pixels"
+        },
+        "imageHeight": {
+          "type": "integer",
+          "description": "Image height in pixels"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server expiry timestamp"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "expired", "revoked"],
+          "description": "Current status of the SortCode"
+        },
+        "passwordProtected": {
+          "type": "boolean",
+          "description": "Whether content is protected with password"
+        },
+        "passwordHash": {
+          "type": "string",
+          "description": "SHA-256 hash of password if protected"
+        },
+        "downloadAllowed": {
+          "type": "boolean",
+          "description": "Whether downloading file or copying is allowed"
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional notes or description"
+        },
+        "viewsCount": {
+          "type": "integer",
+          "description": "Number of times code has been accessed"
+        }
+      },
+      "required": ["code", "ownerUid", "contentType", "createdAt", "expiresAt", "status", "passwordProtected", "downloadAllowed"]
+    },
+    "UserSubscription": {
+      "title": "UserSubscription",
+      "description": "User premium subscription record maintained exclusively by server backend",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "cancelled", "expired", "past_due", "inactive"] },
+        "planId": { "type": "string", "enum": ["premium_monthly", "premium_annual"] },
+        "planName": { "type": "string" },
+        "priceInr": { "type": "integer" },
+        "billingPeriod": { "type": "string", "enum": ["monthly", "annual"] },
+        "startDate": { "type": "string", "format": "date-time" },
+        "expiryDate": { "type": "string", "format": "date-time" },
+        "provider": { "type": "string" },
+        "transactionId": { "type": "string" },
+        "autoRenewing": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "status", "planId", "priceInr", "billingPeriod", "startDate", "expiryDate"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "User profile collection"
+    },
+    "/users/{userId}/subscription/{subscriptionId}": {
+      "schema": {
+        "$ref": "#/entities/UserSubscription"
+      },
+      "description": "User subscription subcollection read-only to client, writable only by server backend"
+    },
+    "/sortCodes/{sortCodeId}": {
+      "schema": {
+        "$ref": "#/entities/SortCode"
+      },
+      "description": "Public lookup and management collection for SortCodes"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "677025722299",
+    "project_id": "mesege-sort",
+    "storage_bucket": "mesege-sort.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677025722299:android:1ff000a2c4770497acde9e",
+        "android_client_info": {
+          "package_name": "com.aistudio.msgsortai.qpvkz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrhcA4kfaKm4WTkE1LMU9W-59t-UXPxLU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
